@@ -1,12 +1,13 @@
 import express from "express";
-import controller from "../controllers/Transaction";
+import { createTransaction, readAll, readTransaction, updateTransaction, deleteTransaction } from "../controllers/Transaction";
+import { verifyJWT } from "../controllers/User";
 
 const router = express.Router();
 
-router.post("/create", controller.createTransaction);
-router.get("/get/:transactionId", controller.readTransaction);
-router.get("/get", controller.readAll);
-router.patch("/update/:transactionId", controller.updateTransaction);
-router.delete("/delete/:transactionId", controller.deleteTransaction);
+router.post("/create", verifyJWT, createTransaction);
+router.get("/get/:transactionId", verifyJWT, readTransaction);
+router.get("/get", verifyJWT, readAll);
+router.patch("/update/:transactionId", verifyJWT, updateTransaction);
+router.delete("/delete/:transactionId", verifyJWT, deleteTransaction);
 
 export default router;

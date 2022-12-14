@@ -1,12 +1,10 @@
 import mongoose, { Document, ObjectId, Schema } from "mongoose";
 
-export interface IHistory {
+export interface IHistoryModel extends Document {
   dateTime: Date;
   transactionId: ObjectId;
   user: string;
 }
-
-export interface IHistoryModel extends IHistory, Document {}
 
 const HistorySchema: Schema = new Schema({
   dateTime: Schema.Types.Date,

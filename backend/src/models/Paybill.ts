@@ -1,14 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export interface IPaybill {
+export interface IPaybillMoodel extends Document {
   email: string;
   bankCode: string;
   billType: string;
   payDate: Date;
   amount: number;
 }
-
-export interface IPaybillMoodel extends IPaybill, Document {}
 
 const PaybillSchema: Schema = new Schema({
   email: String,

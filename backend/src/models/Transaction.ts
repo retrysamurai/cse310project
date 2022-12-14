@@ -1,14 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export interface ITransaction {
+export interface ITransactionModel extends Document {
   dateTime: Date;
   amount: number;
   senderEmail: string;
   receiverEmail: string;
   transactionType: string;
 }
-
-export interface ITransactionModel extends ITransaction, Document {}
 
 const TransactionSchema: Schema = new Schema({
   dateTime: Schema.Types.Date,
