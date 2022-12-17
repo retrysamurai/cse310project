@@ -13,6 +13,7 @@ const router = express();
 
 // Connect to MongoDB
 mongoose
+  .set("strictQuery", true)
   .connect(config.mongo.url, { retryWrites: true, w: "majority" })
   .then(() => {
     Logging.info("Connected to MongoDB");

@@ -11,6 +11,7 @@ export interface ReqWithJWT extends Request {
 
 export const createUser = (req: Request, res: Response, next: NextFunction) => {
   const { fullname, phone, nid, balance, role, email, password, username } = req.body;
+  const hashedPass = bcrypt.hashSync(password, 10);
 
   const user = new User({
     _id: new mongoose.Types.ObjectId(),
@@ -20,7 +21,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
     balance,
     role,
     email,
-    password,
+    password: hashedPass,
     username
   });
 
@@ -99,8 +100,9 @@ export const login = async (req: Request, res: Response) => {
     phone: user.phone,
     nid: user.nid,
     balance: user.balance,
-    role: user.role,
-    username: user.username
+    email: user.email,
+    username: user.username,
+    role: user.role
   });
 };
 
