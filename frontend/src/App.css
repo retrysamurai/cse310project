@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 * {
   margin: 0;
@@ -9,7 +9,7 @@
 
 :root {
   --primary: rgb(80, 70, 100);
-  --secondary: rgb(115,107,131);
+  --secondary: rgb(115, 107, 131);
 }
 
 body,
@@ -55,7 +55,7 @@ body {
 .container {
   width: 90%;
   height: 90%;
-/*   flex-direction: column; */
+  /*   flex-direction: column; */
   color: var(--secondary);
   background-color: var(--primary);
   outline: 5px solid var(--primary);
@@ -90,7 +90,14 @@ body {
 .container .dashboard .history {
   width: calc(50% - 45px);
   height: calc(100% - 60px);
+  flex-direction: column;
   border: none;
   border: 5px solid var(--secondary);
+  border-radius: 20px;
+}
+
+.container .dashboard .actions .action {
+  width: calc(100% - 20px);
+  border: 1px solid var(--secondary);
   border-radius: 20px;
 }
