@@ -30,8 +30,10 @@ export function Login() {
     fetch("http://localhost:4400/users/login", options)
       .then((response) => response.json())
       .then((response) => {
+        // console.log(response);
         if (response.token) {
           localStorage.setItem("token", response.token);
+          localStorage.setItem("id", response.id);
           localStorage.setItem("fullname", response.fullname);
           localStorage.setItem("phone", response.phone);
           localStorage.setItem("nid", response.nid);
@@ -49,12 +51,14 @@ export function Login() {
 
   return !hasToken ? (
     <div className="container">
-      <form onSubmit={handleSubmit}>
-        <p className="title">Login</p>
-        <input type="email" placeholder="Email" ref={emailRef} />
-        <input type="password" placeholder="Password" ref={passRef} />
-        <button type="submit">Submit</button>
-      </form>
+      <div className="form">
+        <form onSubmit={handleSubmit}>
+          <p className="title">Login</p>
+          <input type="email" placeholder="Email" ref={emailRef} />
+          <input type="password" placeholder="Password" ref={passRef} />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
       <div className="links">
         <a href="/signup">Signup</a>
         <a href="/">Homepage</a>

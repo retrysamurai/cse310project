@@ -10,7 +10,7 @@ export interface ReqWithJWT extends Request {
 }
 
 export const createUser = (req: Request, res: Response, next: NextFunction) => {
-  const { fullname, phone, nid, balance, role, email, password, username } = req.body;
+  const { fullname, phone, nid, role, email, password, username } = req.body;
   const hashedPass = bcrypt.hashSync(password, 10);
 
   const user = new User({
@@ -18,7 +18,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
     fullname,
     phone,
     nid,
-    balance,
+    balance: 1000,
     role,
     email,
     password: hashedPass,
@@ -96,6 +96,7 @@ export const login = async (req: Request, res: Response) => {
 
   res.status(200).send({
     token: `Bearer ${token}`,
+    id: user._id,
     fullname: user.fullname,
     phone: user.phone,
     nid: user.nid,

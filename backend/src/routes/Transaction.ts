@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/create", verifyJWT, createTransaction);
 router.get("/get/:transactionId", verifyJWT, readTransaction);
-router.get("/get", verifyJWT, readAll);
+router.get("/get", readAll);
 router.patch("/update/:transactionId", verifyJWT, updateTransaction);
 router.delete("/delete/:transactionId", verifyJWT, deleteTransaction);
 

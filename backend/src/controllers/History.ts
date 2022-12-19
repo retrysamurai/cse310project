@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import mongoose, { mongo } from "mongoose";
+import mongoose, { Date, mongo } from "mongoose";
 import History from "../models/History";
 
 export interface ReqWithJWT extends Request {
@@ -7,20 +7,15 @@ export interface ReqWithJWT extends Request {
   USER_ROLE: string;
 }
 
-export const createHistory = (req: Request, res: Response, next: NextFunction) => {
-  const { dateTime, transactionId, user } = req.body;
-
+export const createHistory = (dateTime: Date, transactionId: mongoose.Types.ObjectId, transactionType: string, userEmail: string) => {
   const history = new History({
-    _id: new mongoose.Types.ObjectId(),
     dateTime,
     transactionId,
-    user
+    transactionType,
+    userEmail
   });
 
-  return history
-    .save()
-    .then((history) => res.status(201).json({ history }))
-    .catch((error) => res.status(500).json({ error }));
+  return history.save();
 };
 
 export const readHistory = (req: Request, res: Response, next: NextFunction) => {

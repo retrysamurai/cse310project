@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import mongoose, { mongo } from "mongoose";
 import Transaction from "../models/Transaction";
+import { createHistory } from "./History";
 
 export interface ReqWithJWT extends Request {
   USER_ID: string;
@@ -10,8 +11,10 @@ export interface ReqWithJWT extends Request {
 export const createTransaction = (req: Request, res: Response, next: NextFunction) => {
   const { dateTime, amount, senderEmail, receiverEmail, transactionType } = req.body;
 
+  const transactionId = new mongoose.Types.ObjectId();
+
   const transaction = new Transaction({
-    _id: new mongoose.Types.ObjectId(),
+    _id: transactionId,
     dateTime,
     amount,
     senderEmail,
@@ -21,12 +24,15 @@ export const createTransaction = (req: Request, res: Response, next: NextFunctio
 
   return transaction
     .save()
-    .then((transaction) => res.status(201).json({ transaction }))
+    .then((transaction) => {
+      createHistory(dateTime, transactionId, transactionType, senderEmail);
+      res.status(201).json({ transaction });
+    })
     .catch((error) => res.status(500).json({ error }));
 };
 
 export const readTransaction = (req: Request, res: Response, next: NextFunction) => {
-  const transactionId = (req as ReqWithJWT).USER_ID;
+  const transactionId = req.params.transactionId;
 
   return Transaction.findById(transactionId)
     .then((transaction) => (transaction ? res.status(200).json({ transaction }) : res.status(404).json({ message: "Transaction Not Found" })))

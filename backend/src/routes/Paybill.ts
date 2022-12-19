@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/create", verifyJWT, createPaybill);
 router.get("/get/:paybillId", verifyJWT, readPaybill);
-router.get("/get", verifyJWT, readAll);
+router.get("/get", readAll);
 router.patch("/update/:paybillId", verifyJWT, updatePaybill);
 router.delete("/delete/:paybillId", verifyJWT, deletePaybill);
 

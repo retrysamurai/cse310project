@@ -18,6 +18,9 @@ form,
 .container,
 .container .links,
 .container .dashboard,
+.container .welcome,
+.container .form,
+.container .noauth,
 .container .dashboard .actions,
 .container .dashboard .actions .action,
 .container .dashboard .history {
@@ -31,9 +34,10 @@ form {
 }
 
 input {
-  height: 30px;
-  margin: 10px;
+  margin: 0;
+  margin-bottom: 10px;
   padding: 5px;
+  height: 30px;
   border: none;
   border-radius: 5px;
 }
@@ -63,10 +67,12 @@ button {
 select {
   margin: 0;
   margin-bottom: 10px;
+  padding: 10px;
   width: 150px;
-  height: 30px;
+  /* height: 30px; */
   background-color: var(--secondary);
   color: white;
+  border: none;
   border-radius: 10px;
 }
 
@@ -76,8 +82,8 @@ select {
 }
 
 .container {
-  width: 90%;
-  height: 90%;
+  width: 95%;
+  height: 95%;
   flex-direction: column;
   background-color: var(--primary);
   color: white;
@@ -93,12 +99,20 @@ select {
 }
 
 .container .welcome {
+  /* margin: 50px; */
   width: 75%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.container .form,
+.container .noauth {
+  height: 100%;
 }
 
 .container .links {
   height: 50px;
-  margin: 10px 0;
+  /* margin: 10px 0; */
   gap: 20px;
   /* background-color: antiquewhite; */
 }

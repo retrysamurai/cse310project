@@ -45,19 +45,21 @@ export function Signup() {
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
-        <p className="title">Signup</p>
-        <input type="text" placeholder="Full Name" ref={fullnameRef} />
-        <input type="text" placeholder="Phone no." ref={phoneRef} />
-        <input type="text" placeholder="NID" ref={nidRef} />
-        <input type="email" placeholder="Email" ref={emailRef} />
-        <input type="password" placeholder="Password" ref={passwordRef} />
-        <input type="text" placeholder="Username" ref={usernameRef} />
-        <span>
-          <input type="checkbox" ref={roleRef} /> Are you an agent?
-        </span>
-        <input type="submit" value="Signup" />
-      </form>
+      <div className="form">
+        <form onSubmit={handleSubmit}>
+          <p className="title">Signup</p>
+          <input type="text" placeholder="Full Name" ref={fullnameRef} />
+          <input type="text" placeholder="Phone no." ref={phoneRef} />
+          <input type="text" placeholder="NID" ref={nidRef} />
+          <input type="email" placeholder="Email" ref={emailRef} />
+          <input type="password" placeholder="Password" ref={passwordRef} />
+          <input type="text" placeholder="Username" ref={usernameRef} />
+          <span>
+            <input type="checkbox" ref={roleRef} /> Are you an agent?
+          </span>
+          <input type="submit" value="Signup" />
+        </form>
+      </div>
       <div className="links">
         <a href="Login">Login</a>
         <a href="/">Homepage</a>
