@@ -1,21 +1,26 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const TRANSAC_PST_URL = "http://127.0.0.0:4400/transactions/create";
-const TRANSAC_GET_URL = "http://127.0.0.0:4400/transactions/get";
+// const TRANSAC_GET_URL = "http://127.0.0.0:4400/transactions/get";
 const PAYBILL_PST_URL = "http://127.0.0.0:4400/paybills/create";
-const PAYBILL_GET_URL = "http://127.0.0.0:4400/paybills/get";
-const HISTORY_PST_URL = "http://127.0.0.0:4400/histories/create";
+// const PAYBILL_GET_URL = "http://127.0.0.0:4400/paybills/get";
 const HISTORY_GET_URL = "http://127.0.0.0:4400/histories/get";
 
 interface History {
+  _id: string | null;
   dateTime: string;
   transactionId: string;
-  user: string;
+  transactionType: string;
+  userEmail: string;
 }
 
 export function Dashboard() {
   const [hasToken, setHasToken] = useState(
     localStorage.getItem("token") !== null
+  );
+
+  const [currentBalance, setCurrentBalance] = useState(
+    localStorage.getItem("balance")
   );
 
   const [historyList, setHistoryList] = useState<History[]>([]);
@@ -49,8 +54,8 @@ export function Dashboard() {
   const processTransaction = (e: any, type: string) => {
     e.preventDefault();
 
-    // console.log(smAmountRef.current?.value);
-    // console.log(smEmailRef.current?.value);
+    // console.log(amountRef.current?.value);
+    // console.log(emailRef.current?.value);
 
     fetch(TRANSAC_PST_URL, {
       method: "POST",
@@ -60,20 +65,48 @@ export function Dashboard() {
       },
       body: JSON.stringify({
         dateTime: new Date(),
-        amount: smAmountRef.current?.value,
+        amount:
+          type === "send"
+            ? smAmountRef.current?.value
+            : coAmountRef.current?.value,
         senderEmail: localStorage.getItem("email"),
-        receiverEmail: smEmailRef.current?.value,
+        receiverEmail:
+          type === "send"
+            ? smEmailRef.current?.value
+            : coEmailRef.current?.value,
         transactionType: type,
       }),
+    }).then(async (response) => {
+      const data = await response.json();
+      const newEntry: History = {
+        _id: null,
+        dateTime: new Date().toISOString(),
+        transactionId: data.transaction._id,
+        transactionType: type,
+        userEmail: localStorage.getItem("email") ?? "unknown",
+      };
+      setHistoryList([...historyList, newEntry]);
+      localStorage.setItem(
+        "balance",
+        String(
+          Number(localStorage.getItem("balance")) -
+            Number(
+              type === "send"
+                ? smAmountRef.current?.value
+                : coAmountRef.current?.value
+            )
+        )
+      );
+      setCurrentBalance(localStorage.getItem("balance"));
     });
   };
 
   const processPayBill = (e: any) => {
     e.preventDefault();
 
-    console.log(pbAmountRef.current?.value);
-    console.log(pbBankRef.current?.value);
-    console.log(pbBillTypeRef.current?.value);
+    // console.log(pbAmountRef.current?.value);
+    // console.log(pbBankRef.current?.value);
+    // console.log(pbBillTypeRef.current?.value);
 
     fetch(PAYBILL_PST_URL, {
       method: "POST",
@@ -88,19 +121,61 @@ export function Dashboard() {
         payDate: new Date(),
         amount: pbAmountRef.current?.value,
       }),
-    }).catch((error) => {
-      console.log(error);
+    }).then(async (response) => {
+      const data = await response.json();
+      const newEntry: History = {
+        _id: null,
+        dateTime: new Date().toISOString(),
+        transactionId: data.paybill._id,
+        transactionType: "bill",
+        userEmail: localStorage.getItem("email") ?? "unknown",
+      };
+      setHistoryList([...historyList, newEntry]);
+      localStorage.setItem(
+        "balance",
+        String(
+          Number(localStorage.getItem("balance")) -
+            Number(pbAmountRef.current?.value)
+        )
+      );
+      setCurrentBalance(localStorage.getItem("balance"));
     });
   };
+
+  const fetchHistory = () => {
+    const link = new URL(HISTORY_GET_URL);
+    link.searchParams.append(
+      "userEmail",
+      localStorage.getItem("email") as string
+    );
+
+    fetch(link, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token") as string,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setHistoryList(response.historys);
+      });
+  };
+
+  useEffect(() => {
+    fetchHistory();
+  }, []);
 
   return hasToken ? (
     <div className="container">
       <div className="dashboard">
         <div className="actions">
-          <p>Welcome, {localStorage.getItem("fullname")}!</p>
-          <p>Balance: {localStorage.getItem("balance")}</p>
+          <div>
+            <p>Welcome, {localStorage.getItem("fullname")}!</p>
+            <p>Balance: {currentBalance}</p>
+          </div>
           <div className="action">
-            <p>Send Money</p>
+            <p className="action-title">Send Money</p>
             <form>
               <input type="text" ref={smAmountRef} placeholder="Amount" />
               <input
@@ -114,7 +189,7 @@ export function Dashboard() {
             </form>
           </div>
           <div className="action">
-            <p>Cash Out</p>
+            <p className="action-title">Cash Out</p>
             <form>
               <input type="text" ref={coAmountRef} placeholder="Amount" />
               <input type="text" ref={coEmailRef} placeholder="Agent Email" />
@@ -124,7 +199,7 @@ export function Dashboard() {
             </form>
           </div>
           <div className="action">
-            <p>Pay Bill</p>
+            <p className="action-title">Pay Bill</p>
             <form>
               <input type="text" ref={pbAmountRef} placeholder="Amount" />
               <select ref={pbBankRef}>
@@ -145,6 +220,18 @@ export function Dashboard() {
         </div>
         <div className="history">
           <h1>History</h1>
+          <div className="cell">
+            <p id="cell-date">Date</p>
+            <p id="cell-id">Transaction ID</p>
+            <p id="cell-type">Transaction Type</p>
+          </div>
+          {historyList.map((data) => (
+            <div className="cell" key={data._id}>
+              <p id="cell-date">{data.dateTime}</p>
+              <p id="cell-id">{data.transactionId}</p>
+              <p id="cell-type">{data.transactionType?.toUpperCase()}</p>
+            </div>
+          ))}
         </div>
       </div>
       <div className="links">

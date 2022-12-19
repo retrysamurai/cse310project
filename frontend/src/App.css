@@ -1,10 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
+  font-weight: 400;
 }
 
 :root {
@@ -23,7 +25,8 @@ form,
 .container .noauth,
 .container .dashboard .actions,
 .container .dashboard .actions .action,
-.container .dashboard .history {
+.container .dashboard .history,
+.container .dashboard .history .cell {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +40,7 @@ input {
   margin: 0;
   margin-bottom: 10px;
   padding: 5px;
-  height: 30px;
+  height: 25px;
   border: none;
   border-radius: 5px;
 }
@@ -67,9 +70,10 @@ button {
 select {
   margin: 0;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 0;
+  padding-left: 10px;
   width: 150px;
-  /* height: 30px; */
+  height: 30px;
   background-color: var(--secondary);
   color: white;
   border: none;
@@ -133,6 +137,10 @@ select {
   border-radius: 20px;
 }
 
+.container .dashboard .history {
+  gap: 5px;
+}
+
 .container .dashboard .actions .action {
   margin: 10px;
   padding: 10px;
@@ -141,4 +149,38 @@ select {
   /* gap: 10px; */
   border: 3px solid var(--secondary);
   border-radius: 20px;
+}
+
+.container .dashboard .actions .action-title {
+  padding: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.container .dashboard .history .cell {
+  width: 75%;
+}
+
+.cell #cell-date,
+.cell #cell-id,
+.cell #cell-type {
+  display: flex;
+  align-items: center;
+  font-family: "Roboto Mono", monospace;
+  font-weight: 300;
+}
+
+.cell #cell-date {
+  width: 25%;
+  justify-content: flex-end;
+}
+
+.cell #cell-id {
+  width: 50%;
+  justify-content: center;
+}
+
+.cell #cell-type {
+  width: 25%;
+  justify-content: flex-start;
 }

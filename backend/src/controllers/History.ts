@@ -19,15 +19,19 @@ export const createHistory = (dateTime: Date, transactionId: mongoose.Types.Obje
 };
 
 export const readHistory = (req: Request, res: Response, next: NextFunction) => {
-  const historyId = (req as ReqWithJWT).USER_ID;
+  // const historyId = (req as ReqWithJWT).USER_ID;
 
-  return History.findById(historyId)
+  return History.find({ email: req.body.email })
     .then((history) => (history ? res.status(200).json({ history }) : res.status(404).json({ message: "History Not Found" })))
     .catch((error) => res.status(500).json({ error }));
 };
 
 export const readAll = (req: Request, res: Response, next: NextFunction) => {
-  return History.find()
+  let filter: { [key: string]: any } = {};
+  if (req.query.userEmail) {
+    filter.userEmail = req.query.userEmail;
+  }
+  return History.find(filter)
     .then((historys) => res.status(200).json({ historys }))
     .catch((error) => res.status(500).json({ error }));
 };

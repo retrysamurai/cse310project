@@ -9,11 +9,11 @@ export interface ITransactionModel extends Document {
 }
 
 const TransactionSchema: Schema = new Schema({
-  dateTime: Schema.Types.Date,
-  amount: Number,
-  senderEmail: String,
-  receiverEmail: String,
-  transactionType: String
+  dateTime: { required: true, type: Schema.Types.Date },
+  amount: { required: true, type: Number },
+  senderEmail: { required: true, type: String },
+  receiverEmail: { required: true, type: String },
+  transactionType: { required: true, type: String }
 });
 
 export default mongoose.model<ITransactionModel>("Transaction", TransactionSchema);
