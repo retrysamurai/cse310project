@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-const TRANSAC_PST_URL = "http://127.0.0.0:4400/transactions/create";
-// const TRANSAC_GET_URL = "http://127.0.0.0:4400/transactions/get";
-const PAYBILL_PST_URL = "http://127.0.0.0:4400/paybills/create";
-// const PAYBILL_GET_URL = "http://127.0.0.0:4400/paybills/get";
-const HISTORY_GET_URL = "http://127.0.0.0:4400/histories/get";
+const TRANSAC_PST_URL = "http://localhost:4400/transactions/create";
+const PAYBILL_PST_URL = "http://localhost:4400/paybills/create";
+const HISTORY_GET_URL = "http://localhost:4400/histories/get";
 
 interface History {
   _id: string | null;
@@ -15,9 +13,7 @@ interface History {
 }
 
 export function Dashboard() {
-  const [hasToken, setHasToken] = useState(
-    localStorage.getItem("token") !== null
-  );
+  const hasToken = localStorage.getItem("token") !== null;
 
   const [currentBalance, setCurrentBalance] = useState(
     localStorage.getItem("balance")
@@ -159,7 +155,8 @@ export function Dashboard() {
       .then((response) => response.json())
       .then((response) => {
         setHistoryList(response.historys);
-      });
+      })
+      .catch((error) => console.log(error));
   };
 
   useEffect(() => {
@@ -170,7 +167,7 @@ export function Dashboard() {
     <div className="container">
       <div className="dashboard">
         <div className="actions">
-          <div>
+          <div className="banner">
             <p>Welcome, {localStorage.getItem("fullname")}!</p>
             <p>Balance: {currentBalance}</p>
           </div>
@@ -227,7 +224,7 @@ export function Dashboard() {
           </div>
           {historyList.map((data) => (
             <div className="cell" key={data._id}>
-              <p id="cell-date">{data.dateTime}</p>
+              <p id="cell-date">{data.dateTime.split("T")[0]}</p>
               <p id="cell-id">{data.transactionId}</p>
               <p id="cell-type">{data.transactionType?.toUpperCase()}</p>
             </div>

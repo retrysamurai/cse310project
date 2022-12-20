@@ -1,5 +1,5 @@
 import { useRef } from "react";
-const URL = "http://127.0.0.1:4400/users/create";
+const URL = "http://localhost:4400/users/create";
 
 export function Signup() {
   const fullnameRef = useRef<HTMLInputElement>(null);
